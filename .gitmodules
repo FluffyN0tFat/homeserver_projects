@@ -1,0 +1,3 @@
+[submodule "webscraping_judotermine"]
+	path = webscraping_judotermine
+	url = https://github.com/FluffyN0tFat/webscrapingJudotermine
