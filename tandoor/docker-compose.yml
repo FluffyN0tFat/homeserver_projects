@@ -30,7 +30,7 @@ services:
     ports:
       - "8700:80"
     volumes:
-      - /home/fs/projects/tandoor/nginx/recipes.conf:/etc/nginx/conf.d/recipes.conf:ro
+      - ./nginx/recipes.conf:/etc/nginx/conf.d/recipes.conf:ro
       - staticfiles:/static:ro
       - /mnt/data/tandoor/mediafiles:/media:ro
       - socket:/tmp/                      # ← neu: dasselbe Volume
