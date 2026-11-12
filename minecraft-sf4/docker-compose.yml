@@ -1,0 +1,53 @@
+services:
+  mc:
+    image: itzg/minecraft-server:java8
+    container_name: mc-sf4
+    restart: unless-stopped
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TZ: Europe/Berlin
+      # Modpack
+      TYPE: AUTO_CURSEFORGE
+      CF_API_KEY: ${CF_API_KEY}
+      CF_SLUG: skyfactory-4
+      # Leistung
+      MEMORY: 6G
+      USE_AIKAR_FLAGS: "true"
+      VIEW_DISTANCE: 8
+      # Welt
+      LEVEL_TYPE: DEFAULT
+      GENERATOR_SETTINGS: '{"Topography-Preset":"Sky Factory 4"}'
+      DIFFICULTY: normal
+      MOTD: "SkyFactory 4"
+      # Zugang
+      WHITELIST: FluffyNotFat, Pinkfoox
+      ENFORCE_WHITELIST: "true"
+      OPS: FluffyNotFat
+      # Fernsteuerung für Backups
+      RCON_PASSWORD: ${RCON_PASSWORD}
+      # Strom sparen
+      ENABLE_AUTOPAUSE: "true"
+      AUTOPAUSE_TIMEOUT_EST: 900
+      MAX_TICK_TIME: "-1"
+    volumes:
+      - /mnt/data/minecraft-sf4:/data
+
+  backup:
+    image: itzg/mc-backup
+    container_name: mc-sf4-backup
+    restart: unless-stopped
+    depends_on:
+      - mc
+    environment:
+      TZ: Europe/Berlin
+      RCON_HOST: mc
+      RCON_PASSWORD: ${RCON_PASSWORD}
+      BACKUP_INTERVAL: 6h
+      INITIAL_DELAY: 10m
+      PRUNE_BACKUPS_DAYS: 7
+      PAUSE_IF_NO_PLAYERS: "true"
+    volumes:
+      - /mnt/data/minecraft-sf4:/data:ro
+      - /mnt/data/minecraft-sf4-backups:/backups
